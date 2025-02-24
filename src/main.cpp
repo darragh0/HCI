@@ -5,6 +5,7 @@
 #include "macros.h"
 #include "sounds.h"
 
+
 uint32_t last_detected = 0;
 uint32_t last_sound_played = 0;
 bool last_state = LOW;
@@ -16,10 +17,12 @@ void setup(void) {
     // Speaker setup is done in the PCM library
     pinMode(SENSOR, INPUT);
     pinMode(LED, OUTPUT);
+    pinMode(PET_BUTTON, INPUT_PULLUP);
 }
 
 void loop(void) {
     bool cur_state = digitalRead(SENSOR);
+    bool pet_pressed = digitalRead(PET_BUTTON) == LOW;
 
     if (cur_state == HIGH && last_state == LOW) {
         last_detected = millis();
@@ -27,6 +30,11 @@ void loop(void) {
         digitalWrite(LED, HIGH);
     } else if (cur_state == LOW) {
         digitalWrite(LED, LOW);
+    }
+
+    if (pet_pressed) {
+        Serial.println("User pets the cat");
+        digitalWrite(LED, HIGH);
     }
 
     last_state = cur_state;
