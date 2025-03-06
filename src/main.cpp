@@ -16,7 +16,6 @@ void setup(void) {
     startPlayback(sounds::meow, sizeof(sounds::meow));
     // Speaker setup is done in the PCM library
     pinMode(SENSOR, INPUT);
-    pinMode(LED, OUTPUT);
     pinMode(PET_BUTTON, INPUT_PULLUP);
 }
 
@@ -34,7 +33,8 @@ void loop(void) {
 
     if (pet_pressed) {
         Serial.println("User pets the cat");
-        digitalWrite(LED, HIGH);
+        startPlayback(sounds::purr, sizeof(sounds::purr));
+        last_sound_played = millis();
     }
 
     last_state = cur_state;
